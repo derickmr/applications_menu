@@ -45,8 +45,9 @@ void menu (){
 		else
 			printf ("\t4) Finalizar processo %s\n", finalizarStatus);
 
-		printf ("\t5) Quit\n");
-		
+		printf ("\t5) Quit\n");	
+	
+				
 	
 }
 
@@ -55,11 +56,11 @@ void* web_browser(void *param){
 	pid_t pid;
 	int status;
 	
-	pid = fork();	//cria filho
+	pid = fork();	
 	
-	if (pid == 0){		//filho
+	if (pid == 0){	
 			
-			//printf ("PID browser: %i", getpid());
+			
 			char url[50];
 			printf ("Digite a url desejada: ");
 			scanf ("%s", url);
@@ -69,7 +70,7 @@ void* web_browser(void *param){
 		
 	}
 	
-	else if (pid < 0){	//erro
+	else if (pid < 0){	
 		
 		browserStatus = "falhou";
 		
@@ -81,16 +82,10 @@ void* web_browser(void *param){
 		browserStatus = "executando";				
 		browserPID = pid;
 
-		
-			/* Código do processo pai continua aqui */
-		/* Aguarda processo filho terminar e recebe status */
 		wait(&status);
 
- 		//verifica se processo filho recebeu sinal para terminação
 		if (WIFSIGNALED(status))
 			browserStatus = "abortado";		
-
-		/* Verifica se o processo filho terminou normalmente */
 		
 		if( WIFEXITED(status) ){
 			
@@ -109,7 +104,6 @@ void* web_browser(void *param){
 			browserStatus = "abortado";
 		}
  
-		/* Imprime dados na tela */	
 		
 		fprintf(stdout, "Processo pai (webBrowser) encerrando. meu PID: %d.\n", (int)getpid() );
 		
@@ -124,7 +118,7 @@ void* text_editor(void *param){
 
 	pid = fork();
 	
-	if (pid == 0){		//filho
+	if (pid == 0){	
 			
 			
 		execlp("/usr/bin/gedit","gedit","newtext.txt",NULL);
@@ -133,7 +127,7 @@ void* text_editor(void *param){
 		
 	}
 	
-	else if (pid < 0){	//erro
+	else if (pid < 0){	
 		
 		textEditorStatus = "falhou";
 		
@@ -145,16 +139,12 @@ void* text_editor(void *param){
 		textEditorStatus = "executando";				
 		textEditorPID = pid;
 
-		
-			/* Código do processo pai continua aqui */
-		/* Aguarda processo filho terminar e recebe status */
 		wait(&status);
 
- 		//verifica se processo filho recebeu sinal para terminação
+
 		if (WIFSIGNALED(status))
 			textEditorStatus = "abortado";		
 
-		/* Verifica se o processo filho terminou normalmente */
 		
 		if( WIFEXITED(status) ){
 			
@@ -172,8 +162,7 @@ void* text_editor(void *param){
 			fprintf(stdout, "Processo filho terminou de forma anormal.\n");
 			textEditorStatus = "abortado";
 		}
- 
-		/* Imprime dados na tela */	
+ 	
 		
 		fprintf(stdout, "Processo pai (textEditor) encerrando. meu PID: %d.\n", (int)getpid() );
 		
@@ -188,7 +177,7 @@ void* terminal(void *param){
 
 	pid = fork();
 	
-	if (pid == 0){		//filho
+	if (pid == 0){	
 			
 		terminalStatus = "executando";	
 		system("gnome-terminal");
@@ -197,7 +186,7 @@ void* terminal(void *param){
 		
 	}
 	
-	else if (pid < 0){	//erro
+	else if (pid < 0){	
 		
 		terminalStatus = "falhou";
 		
@@ -209,16 +198,12 @@ void* terminal(void *param){
 		terminalStatus = "executando";				
 		terminalPID = pid;
 
-		
-			/* Código do processo pai continua aqui */
-		/* Aguarda processo filho terminar e recebe status */
 		wait(&status);
 
- 		//verifica se processo filho recebeu sinal para terminação
+
 		if (WIFSIGNALED(status))
 			terminalStatus = "abortado";		
 
-		/* Verifica se o processo filho terminou normalmente */
 		
 		if( WIFEXITED(status) ){
 			
@@ -236,8 +221,7 @@ void* terminal(void *param){
 			fprintf(stdout, "Processo filho terminou de forma anormal.\n");
 			terminalStatus = "abortado";
 		}
- 
-		/* Imprime dados na tela */	
+ 	
 		
 		fprintf(stdout, "Processo pai (terminal) encerrando. meu PID: %d.\n", (int)getpid() );
 		
@@ -259,35 +243,6 @@ void* kill_process(void *param){
 	printf ("Digite qual processo deve ser terminado: ");
 	scanf ("%i", &killProcess);
 	
-	/*
-	char killedPID[12];
-	
-		switch (killProcess){
-			case 1:
-				//killedPID = (int)browserPID;
-				sprintf (killedPID, "%d", (int)browserPID);
-				//execlp ("kill", killedPID, NULL);
-				kill(browserPID, SIGTERM);
-				break;
-			case 2:
-				//killedPID = (int)browserPID;
-				sprintf (killedPID, "%d", (int)textEditorPID);
-				//execlp ("kill", killedPID, NULL);
-				kill(textEditorPID, SIGTERM);
-				break;
-			
-			case 3:
-				//killedPID = (int)browserPID;
-				sprintf (killedPID, "%d", (int)terminalPID);
-				//execlp ("kill", killedPID, NULL);
-				kill(terminalPID, SIGTERM);
-				break;
-			
-			default:
-			
-				printf ("Opção inválida");
-		} */
-
 		if (killProcess == 1)
 			kill(browserPID, SIGTERM);
 		else if (killProcess == 2)
@@ -306,16 +261,11 @@ void* kill_process(void *param){
 		finalizarStatus = "executando";				
 		finalizarPID = pid;
 
-	
-			/* Código do processo pai continua aqui */
-		/* Aguarda processo filho terminar e recebe status */
 		wait(&status);
  		
 		if (WIFSIGNALED(status))
 			finalizarStatus = "abortado";		
 	
-		/* Verifica se o processo filho terminou normalmente */
-		/* Caso tenha terminado, imprime o status de saída do filho */
 		if( WIFEXITED(status) ){
 
 			int saidaFilho;
@@ -331,11 +281,10 @@ void* kill_process(void *param){
 		}
 		else{
 			finalizarStatus = "abortado";
-			fprintf(stdout, "Processo filho terminou de forma anormal2.\n");
+			fprintf(stdout, "Processo filho terminou de forma anormal.\n");
 			
 		}
  
-		/* Imprime dados na tela */
 		fprintf(stdout, "Processo pai (killProcess) terminando. meu PID: %d.\n", (int)getpid() );
 		
 	}	
@@ -386,6 +335,8 @@ int main(){
 		exit (-1);
 	}
 
+	
+
 	browserStatus = "";
 	textEditorStatus = "";
 	terminalStatus = "";
@@ -393,14 +344,22 @@ int main(){
 
 	int option = 0;
 	
+	menu();
+
 	while (option != 5){
 		
-		menu();
+		option = 0;
+		
+		while (option == 0){
+
 		printf ("Option: ");
 		scanf ("%i", &option);
 		printf ("\n");
 
+		}
+
 		option_call(option);
+		menu();
 		sleep (5);
 	
 	}
